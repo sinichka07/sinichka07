@@ -1,0 +1,24 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="LatestVersionOfMusicAlbums.MainWindow"
+        Title="LatestVersionOfMusicAlbums">
+    <StackPanel>
+        <TextBox x:Name="TitleTextBox" Watermark="Title of Album" Margin="10"/>
+        <TextBox x:Name="ArtistTextBox" Watermark="Name of singer" Margin="10"/>
+        <TextBox x:Name="YearTextBox" Watermark="Year of issue" Margin="10"/>
+        <Button Content="Add Album" x:Name="AddAlbumCommand" Margin="10" Click="AddAlbum_Click"/>
+        <Button Content="Delete Album" x:Name="DeleteAlbumCommand" Margin="10" Click="DeleteAlbum_Click"/>
+        <Button Content="Edit Album" x:Name="EditAlbumCommand" Margin="10" Click="EditAlbum_Click"/>
+        <ListBox x:Name="AlbumListBox" Margin="10"/>
+        <TextBox x:Name="DeleteAlbumIdTextBox" Watermark="Id of album you want to delete" Margin="10" />
+        <TextBox x:Name="EditAlbumIdTextBox" Watermark="Id of album you want to edit" Margin="10"  />
+        <TextBox x:Name="EditedTitleTextBox" Watermark="Write new title for album you want to edit" Margin="10" IsVisible = "False" />
+        <TextBox x:Name="EditedArtistTextBox" Watermark="Write new artist of album you want to edit" Margin="10" IsVisible = "False" />
+        <TextBox x:Name="EditedYearTextBox" Watermark="Write new year of issue of album you want to edit" Margin="10" IsVisible = "False" />
+        <Button Content="Save edited album" x:Name="SaveAlbumCommand" Margin="10" Click="SaveAlbum_Click" IsVisible = "False"/>
+    </StackPanel>
+</Window>
+
