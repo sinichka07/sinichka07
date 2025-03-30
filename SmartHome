@@ -1,0 +1,171 @@
+abstract class SmartDevice {
+  String name;
+  bool isOn = false;
+
+  SmartDevice({required this.name});
+
+  void turnOn() {
+    isOn = true;
+    print('$name увімкнено.');
+  }
+
+  void turnOff() {
+    isOn = false;
+    print('$name вимкнено.');
+  }
+
+  void status();
+}
+
+mixin EnergyConsumption {
+  double energyConsumed = 0.0;
+
+  void addConsumption(double amount) {
+    energyConsumed += amount;
+  }
+
+  double getEnergyConsumption() => energyConsumed;
+}
+
+class SmartLight extends SmartDevice with EnergyConsumption {
+  int brightness;
+  String color;
+
+  SmartLight({required super.name,this.brightness = 50, this.color = 'Білий'});
+
+  void setBrightness(int level) {
+    brightness = level.clamp(0, 100);
+    print('$name: Яскравість встановлена на $brightness%.');
+  }
+
+  void setColor(String newColor) {
+    color = newColor;
+    print('$name: Колір змінено на $color.');
+  }
+
+  @override
+  void status() {
+    print(
+        '$name (${isOn ? "Увімкнено" : "Вимкнено"}), Яскравість: $brightness%, Колір: $color.');
+  }
+}
+
+class SmartThermostat extends SmartDevice with EnergyConsumption {
+  double temperature;
+  String mode; // "Охолодження" або "Нагрів"
+
+  SmartThermostat(
+      {required super.name,this.temperature = 22.0, this.mode = "Охолодження"});
+
+  void setTemperature(double temp) {
+    temperature = temp;
+    print('$name: Температура встановлена на $temperature°C.');
+  }
+
+  void setMode(String newMode) {
+    if (newMode == "Охолодження" || newMode == "Нагрів") {
+      mode = newMode;
+      print('$name: Режим змінено на $mode.');
+    } else {
+      print('Невідомий режим.');
+    }
+  }
+
+  @override
+  void status() {
+    print(
+        '$name (${isOn ? "Увімкнено" : "Вимкнено"}), Температура: $temperature°C, Режим: $mode.');
+  }
+}
+
+class SmartSecurity extends SmartDevice with EnergyConsumption {
+  bool armed;
+  List<String> sensors;
+
+  SmartSecurity({required super.name,this.armed = false, List<String>? sensors})
+      : sensors = sensors ?? [];
+
+  void arm() {
+    armed = true;
+    print('$name: Охоронний режим увімкнено.');
+  }
+
+  void disarm() {
+    armed = false;
+    print('$name: Охоронний режим вимкнено.');
+  }
+
+  void addSensor(String sensor) {
+    sensors.add(sensor);
+    print('$name: Додано сенсор - $sensor.');
+  }
+
+  @override
+  void status() {
+    print(
+        '$name (${isOn ? "Увімкнено" : "Вимкнено"}), Охоронний режим: ${armed ? "Увімкнено" : "Вимкнено"}, Сенсори: ${sensors.join(", ")}.');
+  }
+}
+
+class SmartHome {
+  List<SmartDevice> devices = [];
+
+  void addDevice(SmartDevice device) {
+    devices.add(device);
+    print('${device.name} додано до системи розумного будинку.');
+  }
+
+  void turnAllOn() {
+    for (var device in devices) {
+      device.turnOn();
+    }
+  }
+
+  void turnAllOff() {
+    for (var device in devices) {
+      device.turnOff();
+    }
+  }
+
+  void showStatus() {
+    print('\nСтатус системи розумного будинку:');
+    for (var device in devices) {
+      device.status();
+    }
+  }
+
+  double totalEnergyConsumption() {
+    double total = 0.0;
+    for (var device in devices) {
+      if (device is EnergyConsumption) {
+        total += (device as EnergyConsumption).getEnergyConsumption();
+      }
+    }
+    return total;
+  }
+}
+
+  void main() {
+    SmartHome home = SmartHome();
+
+    SmartLight light =
+        SmartLight(name: "Лампа у вітальні", brightness: 75, color: "Жовтий");
+    SmartThermostat thermostat =
+        SmartThermostat(name: "Термостат", temperature: 24.0, mode: "Нагрів");
+    SmartSecurity security = SmartSecurity(name: "Сигналізація",
+        armed: false, sensors: ["Двері", "Вікно"]);
+
+    home.addDevice(light);
+    home.addDevice(thermostat);
+    home.addDevice(security);
+
+    home.turnAllOn();
+    light.setBrightness(90);
+    thermostat.setTemperature(21.5);
+    security.arm();
+
+    home.showStatus();
+
+    print(
+        "\nЗагальне енергоспоживання: ${home.totalEnergyConsumption()} кВт·год.");
+  }
