@@ -1,0 +1,88 @@
+import 'dart:math';
+
+mixin TransactionHistory {
+  List<String> transactions = [];
+
+  void addTransaction(String transaction) {
+    transactions.add(transaction);
+  }
+
+  void printTransactionHistory() {
+    print("Історія транзакцій:");
+    for (var transaction in transactions) {
+      print(transaction);
+    }
+  }
+}
+
+class Account with TransactionHistory {
+  String owner;
+  double balance;
+
+  Account(this.owner, this.balance);
+
+  void deposit(double amount) {
+    if (amount > 0) {
+      balance += amount;
+      addTransaction("Депозит: +\$${amount.toStringAsFixed(2)}");
+    }
+  }
+
+  void withdraw(double amount) {
+    if (amount > 0 && amount <= balance) {
+      balance -= amount;
+      addTransaction("Зняття: -\$${amount.toStringAsFixed(2)}");
+    } else {
+      print("Недостатньо коштів!");
+    }
+  }
+
+  double getBalance() => balance;
+}
+
+class SavingsAccount extends Account {
+  double interestRate;
+
+  SavingsAccount(String owner, double balance, this.interestRate)
+      : super(owner, balance);
+
+  void applyInterest() {
+    double interest = balance * (interestRate / 100);
+    deposit(interest);
+    addTransaction("Нараховані відсотки: +\$${interest.toStringAsFixed(2)}");
+  }
+}
+
+class CheckingAccount extends Account {
+  double overdraftLimit;
+
+  CheckingAccount(String owner, double balance, this.overdraftLimit)
+      : super(owner, balance);
+
+  @override
+  void withdraw(double amount) {
+    if (amount > 0 && amount <= balance + overdraftLimit) {
+      balance -= amount;
+      addTransaction("Зняття: -\$${amount.toStringAsFixed(2)}");
+    } else {
+      print("Перевищено ліміт овердрафту!");
+    }
+  }
+}
+
+void main() {
+  SavingsAccount sa = SavingsAccount("Анна", 1000, 5);
+  CheckingAccount ca = CheckingAccount("Богдан", 500, 200);
+
+  sa.deposit(200);
+  sa.applyInterest();
+  sa.withdraw(500);
+  sa.printTransactionHistory();
+
+  print("\n");
+
+  ca.deposit(300);
+  ca.withdraw(800);
+  ca.withdraw(50);
+  ca.printTransactionHistory();
+}
