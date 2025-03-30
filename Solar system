@@ -1,0 +1,143 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(SolarSystemApp());
+}
+
+class SolarSystemApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Планети Сонячної системи',
+      theme: ThemeData.dark(),
+      home: SolarSystemScreen(),
+    );
+  }
+}
+
+class SolarSystemScreen extends StatelessWidget {
+  final List<Map<String, String>> planets = [
+    {
+      "name": "Меркурій",
+      "distance": "57.9 млн км",
+      "image": "https://static.wikia.nocookie.net/astronomy/images/d/d6/Mercury-l-1.jpg/revision/latest?cb=20140730161852&path-prefix=ru"
+    },
+    {
+      "name": "Венера",
+      "distance": "108.2 млн км",
+      "image": "https://universemagazine.com/wp-content/uploads/2023/10/photo_2023-10-18_15-59-58.jpg"
+    },
+    {
+      "name": "Земля",
+      "distance": "149.6 млн км",
+      "image": "https://static.wikia.nocookie.net/astronomy/images/6/67/Земля.jpg/revision/latest?cb=20141121171457&path-prefix=ru"
+    },
+    {
+      "name": "Марс",
+      "distance": "227.9 млн км",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/OSIRIS_Mars_true_color.jpg/307px-OSIRIS_Mars_true_color.jpg"
+    },
+    {
+      "name": "Юпітер",
+      "distance": "778.3 млн км",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Jupiter%2C_image_taken_by_NASA%27s_Hubble_Space_Telescope%2C_June_2019_-_Edited.jpg/300px-Jupiter%2C_image_taken_by_NASA%27s_Hubble_Space_Telescope%2C_June_2019_-_Edited.jpg"
+    },
+    {
+      "name": "Сатурн",
+      "distance": "1.4 млрд км",
+      "image": "https://starwalk.space/gallery/images/saturn-quiz-intro/1920x1080.jpg"
+    },
+    {
+      "name": "Уран",
+      "distance": "2.9 млрд км",
+      "image": "https://faktyday.com.ua/wp-content/uploads/2025/01/cikavi-fakti-pro-planetu-uran-780x450.jpg"
+    },
+    {
+      "name": "Нептун",
+      "distance": "4.5 млрд км",
+      "image": "https://img.freepik.com/free-photo/abstract-sphere-glows-blue-underwater-liquid-generated-by-ai_188544-22051.jpg"
+    },
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Планети Сонячної системи')),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(height: 20),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.network(
+                'https://i.natgeofe.com/n/7e5a17ad-4e70-4bf5-a7b7-fdf2f625d5b8/01-solar-system-pia12114_orig.jpg',
+                height: 200,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                'Сонячна система складається з восьми планет, які обертаються навколо Сонця. '
+                'Кожна планета має унікальні характеристики та відстань від Сонця.',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GridView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
+                  childAspectRatio: 0.8,
+                ),
+                itemCount: planets.length,
+                itemBuilder: (context, index) {
+                  return PlanetCard(
+                    name: planets[index]['name']!,
+                    distance: planets[index]['distance']!,
+                    image: planets[index]['image']!,
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class PlanetCard extends StatelessWidget {
+  final String name;
+  final String distance;
+  final String image;
+
+  PlanetCard({required this.name, required this.distance, required this.image});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      elevation: 4,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.network(image, height: 80),
+          ),
+          SizedBox(height: 10),
+          Text(name, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          SizedBox(height: 5),
+          Text('Відстань: $distance', style: TextStyle(fontSize: 14, color: Colors.grey)),
+        ],
+      ),
+    );
+  }
+}
